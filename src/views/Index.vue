@@ -4,6 +4,7 @@
         <hot-playlist></hot-playlist>
         <hot-post></hot-post>
         <hot-group></hot-group>
+        <hot-moment></hot-moment>
     </div>
 </template>
 
@@ -12,13 +13,15 @@
     import HotPlaylist from '@/components/index-page/hot-playlist'
     import HotGroup from '@/components/index-page/hot-group'
     import HotPost from '@/components/index-page/hot-post'
+    import HotMoment from '@/components/index-page/hot-moment'
     export default {
         name: "Index",
         components: {
             'index-carousel': IndexCarousel,
             'hot-playlist': HotPlaylist,
             'hot-group': HotGroup,
-            'hot-post': HotPost
+            'hot-post': HotPost,
+            'hot-moment': HotMoment
         }
     }
 </script>
