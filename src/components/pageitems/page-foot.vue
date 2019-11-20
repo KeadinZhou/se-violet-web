@@ -2,7 +2,7 @@
     <div class="page-foot">
         <p>
             <el-divider></el-divider>
-            Copyright &copy; 2019 Software Engineering Group 9. All Rights Reserved.<br>
+            Copyright &copy; 2019 Software Engineering Group 5. All Rights Reserved.<br>
         </p>
     </div>
 </template>
