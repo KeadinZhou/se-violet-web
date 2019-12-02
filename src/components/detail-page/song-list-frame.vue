@@ -1,6 +1,6 @@
 <template>
     <div>
-        <content-frame title="歌曲列表" :more="false">
+        <content-frame :title="title?title:'歌曲列表'" :more="false">
             <template v-slot:content>
                 <el-table :data="playlistData">
                     <el-table-column label="#" align="center" width="90">
@@ -43,6 +43,9 @@
         name: "song-list-frame",
         components: {
             'content-frame': ContentFrame
+        },
+        props: {
+            title: String
         },
         data () {
             return {

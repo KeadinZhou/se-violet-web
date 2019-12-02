@@ -34,7 +34,7 @@
 
 <style scoped>
     .detail-page-head{
-        /*height: 300px;*/
+        height: 300px;
         width: 100%;
         display: flex;
         justify-content: space-between;

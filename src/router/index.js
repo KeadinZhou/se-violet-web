@@ -7,6 +7,8 @@ import Groups from "@/views/Groups"
 import Login from "@/views/Login"
 import Register from "@/views/Register"
 import Moment from "@/views/Moment"
+import Group from "@/views/Group"
+import Post from "@/views/Post"
 
 Vue.use(VueRouter)
 
@@ -39,11 +41,24 @@ const routes = [
         path: '/moment',
         name: 'moment',
         component: Moment
+    }, {
+        path: '/group',
+        name: 'group',
+        component: Group
+    }, {
+        path: '/post',
+        name: 'post',
+        component: Post
     }
 ]
 
 const router = new VueRouter({
-  routes
+    routes,
+    // eslint-disable-next-line no-unused-vars
+    scrollBehavior (to, from, savedPosition) {
+        console.log(to)
+        return { x: 0, y: 0 }
+    }
 })
 
 export default router
