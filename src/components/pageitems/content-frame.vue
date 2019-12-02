@@ -1,6 +1,6 @@
 <template>
     <div class="frame-box">
-        <div class="frame-top">
+        <div class="frame-top" v-if="!noTitle">
             <span class="frame-title"><i :class="icon?icon:'el-icon-headset'" style="color: #9b59b6"></i><b> {{title}}</b></span>
             <el-button type="text" style="float: right" v-if="more">更多</el-button>
         </div>
@@ -17,7 +17,8 @@
         props: {
             title: String,
             more: Boolean,
-            icon: String
+            icon: String,
+            noTitle: Boolean
         }
     }
 </script>

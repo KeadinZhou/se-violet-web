@@ -3,7 +3,25 @@
         <el-menu :default-active="this.$route.path" class="page-nav" style="height:60px;width:100%;z-index:1000" mode="horizontal" router>
             <el-menu-item index="/" class="nav-item" route="/">首页</el-menu-item>
             <el-menu-item index="/library" class="nav-item" route="/library">曲库</el-menu-item>
-            <el-menu-item index="/group" class="nav-item" route="/group">圈子</el-menu-item>
+            <el-menu-item index="/groups" class="nav-item" route="/groups">圈子</el-menu-item>
+            <el-menu-item index="/moment" class="nav-item" route="/moment">动态</el-menu-item>
+            <el-dropdown @command="handleCommand" class="page-nav-right-menu">
+                <span class="el-dropdown-link">
+                    <i class="el-icon-user el-icon--right"></i>
+                    {{ this.$store.state.user.username }}
+                    <i class="el-icon-arrow-down el-icon--right"></i>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                    <template v-if="this.$store.state.user.permission !== -9">
+                        <el-dropdown-item command="setting">账户设置</el-dropdown-item>
+                        <el-dropdown-item command="logout">退出登录</el-dropdown-item>
+                    </template>
+                    <template v-else>
+                        <el-dropdown-item command="login">登录账号</el-dropdown-item>
+                        <el-dropdown-item command="register">注册账号</el-dropdown-item>
+                    </template>
+                </el-dropdown-menu>
+            </el-dropdown>
         </el-menu>
     </div>
 </template>
@@ -16,6 +34,17 @@
             }
         },
         methods: {
+            handleCommand (command) {
+                if (command === 'register') {
+                    this.$router.push('/register')
+                }
+                if (command === 'login') {
+                    this.$router.push('/login')
+                }
+                if (command === 'logout') {
+                    this.$store.commit('logoutUser')
+                }
+            }
         }
     }
 </script>
@@ -23,5 +52,18 @@
 <style scoped>
     .nav-item{
         font-size: 16px;
+    }
+    .page-nav-right-menu{
+        float: right;
+        height: 60px;
+        line-height: 60px;
+        outline:none;
+    }
+    .el-dropdown-link {
+        cursor: pointer;
+        color: #9b59b6;
+    }
+    .el-icon-arrow-down {
+        font-size: 12px;
     }
 </style>
