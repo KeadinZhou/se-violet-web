@@ -14,7 +14,11 @@ Vue.prototype.$http = axios
 new Vue({
   router,
   store,
-  render: h => h(App)
+  render: h => h(App),
+  created () {
+    store.commit('savePage', this)
+    store.commit('updateUser')
+  }
 }).$mount('#app')
 
 router.beforeEach((to, from, next) => {

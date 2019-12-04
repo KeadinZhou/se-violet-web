@@ -12,11 +12,11 @@
             <el-divider><i class="el-icon-postcard"></i></el-divider>
             <div class="form-box">
                 <el-form :model="FormData" status-icon :rules="rules" ref="FormData" class="demo-ruleForm">
-                    <el-form-item prop="username">
+                    <el-form-item prop="email">
                         <el-input
-                                v-model="FormData.username"
-                                placeholder="账号"
-                                prefix-icon="el-icon-user">
+                                v-model="FormData.email"
+                                placeholder="邮箱"
+                                prefix-icon="el-icon-message">
                         </el-input>
                     </el-form-item>
                     <el-form-item prop="password">
@@ -46,50 +46,53 @@
             return {
                 captcha: '',
                 FormData: {
-                    username: '',
+                    email: '',
                     password: ''
                 },
                 rules: {
+                    email: [{ required: true, message: '请输入你的邮箱!', trigger: ['blur', 'change']},{ type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change']}],
                     username: [{ required: true, message: '请输入你的账号!', trigger: 'blur' }],
                     password: [{ required: true, message: '请输入你的密码!', trigger: 'blur' }]
                 }
             }
         },
         methods: {
-            login (username, password) {
-                this.$store.commit('updateUser', {
-                    userid: password,
-                    username: username,
-                    permission: 1
-                })
-                // const that = this
-                // that.$http.post(that.$store.state.api + '/v1/token', {
-                //     username: username,
-                //     password: password
-                // })
-                //     .then(data => {
-                //         that.$store.commit('updateToken', data.data.data.token)
-                //         that.$store.commit('updateUser', true)
-                //         that.$message.success('登录成功')
-                //     })
-                //     .catch(function (error) {
-                //         if (error.response) {
-                //             var tmp = error.response.data.msg
-                //             if ((typeof tmp) === 'string') {
-                //                 that.$message.error(tmp)
-                //             } else {
-                //                 for (const index in tmp) {
-                //                     that.$message.error(tmp[index][0])
-                //                     break
-                //                 }
-                //             }
-                //         }
-                //     })
+            login (email, password) {
+                const that = this
+                let sendData = new FormData()
+                sendData.append('email', email)
+                sendData.append('password', password)
+                that.$http.post(that.$store.state.api + '/v1/auth/login', sendData)
+                    .then(data => {
+                        const Data = data.data
+                        console.log(Data)
+                        if(Data.code === 200){
+                            that.$message.success('登录成功!')
+                            that.$store.commit('updateUser')
+                            that.$router.push('/moment')
+                        } else {
+                            const msg = Data.errMsg
+                            console.log(msg)
+                            if ((typeof msg) === 'string') {
+                                that.$message.error(msg)
+                            } else {
+                                for(const item in msg) {
+                                    that.$message.error(msg[item][0])
+                                }
+                            }
+                        }
+                    })
+                    .catch(function (error) {
+                        if (error.response) {
+                            console.log(error.response)
+                            that.$message.error('系统错误')
+                        }
+                    })
             },
             submitForm (formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        // this.login(this.FormData.username, this.FormData.password)
+                        this.login(this.FormData.email, this.FormData.password)
                     } else {
                         return false
                     }

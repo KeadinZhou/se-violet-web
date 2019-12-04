@@ -4,11 +4,13 @@
             <el-menu-item index="/" class="nav-item" route="/">首页</el-menu-item>
             <el-menu-item index="/library" class="nav-item" route="/library">曲库</el-menu-item>
             <el-menu-item index="/groups" class="nav-item" route="/groups">圈子</el-menu-item>
-            <el-menu-item index="/moment" class="nav-item" route="/moment">动态</el-menu-item>
+            <template v-if="this.$store.state.user.permission !== -9">
+                <el-menu-item index="/moment" class="nav-item" route="/moment">动态</el-menu-item>
+            </template>
             <el-dropdown @command="handleCommand" class="page-nav-right-menu">
                 <span class="el-dropdown-link">
                     <i class="el-icon-user el-icon--right"></i>
-                    {{ this.$store.state.user.username }}
+                    {{ this.$store.state.user.nickname }}
                     <i class="el-icon-arrow-down el-icon--right"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">

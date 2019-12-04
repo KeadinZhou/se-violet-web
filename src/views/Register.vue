@@ -10,10 +10,17 @@
             <el-divider><i class="el-icon-postcard"></i></el-divider>
             <div class="form-box">
                 <el-form :model="FormData" :rules="rules" ref="FormData" class="demo-ruleForm">
-                    <el-form-item prop="username">
+                    <el-form-item prop="email">
                         <el-input
-                                v-model="FormData.username"
-                                placeholder="账号(学号)"
+                                v-model="FormData.email"
+                                placeholder="邮箱"
+                                prefix-icon="el-icon-message">
+                        </el-input>
+                    </el-form-item>
+                    <el-form-item prop="nickname">
+                        <el-input
+                                v-model="FormData.nickname"
+                                placeholder="昵称"
                                 prefix-icon="el-icon-user">
                         </el-input>
                     </el-form-item>
@@ -50,8 +57,6 @@
             var validateUsername = (rule, value, callback) => {
                 if (value === '') {
                     callback(new Error('请输入你的账号!'))
-                } else if (!/^[0-9]{8}$/.test(value)) {
-                    callback(new Error('请输入合法的用户名(学号)!'))
                 } else {
                     callback()
                 }
@@ -69,12 +74,14 @@
                 captchaImg: '',
                 captchaUuid: '',
                 FormData: {
-                    username: '',
+                    email: '',
+                    nickname: '',
                     password: '',
                     password2: '',
                 },
                 rules: {
-                    username: [{ validator: validateUsername, trigger: 'blur' }],
+                    email: [{ required: true, message: '请输入你的邮箱!', trigger: ['blur', 'change']},{ type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change']}],
+                    nickname: [{ validator: validateUsername, trigger: 'blur' }],
                     password: [{ required: true, message: '请输入你的密码!', trigger: 'blur' }],
                     password2: [{ validator: validatePass, trigger: 'blur' }]
                 }
@@ -83,48 +90,33 @@
         methods: {
             regSure (regData) {
                 const that = this
-                that.$http.post(that.$store.state.api + '/v1/user/', {
-                    username: regData.username,
-                    password: regData.password,
-                    nickname: regData.username,
-                    uuid: this.captchaUuid
-                })
+                let sendData = new FormData()
+                sendData.append('email', regData.email)
+                sendData.append('password', regData.password)
+                sendData.append('nickname', regData.nickname)
+                that.$http.post(that.$store.state.api + '/v1/auth/register', sendData)
                     .then(data => {
-                        console.log(data)
-                        that.$message.success('注册成功!')
-                        that.$http.post(that.$store.state.api + '/v1/token', {
-                            username: regData.username,
-                            password: regData.password
-                        })
-                            .then(data => {
-                                that.$store.commit('updateToken', data.data.data.token)
-                                that.$store.commit('updateUser', true)
-                            })
-                            .catch(function (error) {
-                                if (error.response) {
-                                    var tmp = error.response.data.msg
-                                    if ((typeof tmp) === 'string') {
-                                        that.$message.error(tmp)
-                                    } else {
-                                        for (const index in tmp) {
-                                            that.$message.error(tmp[index][0])
-                                            break
-                                        }
-                                    }
+                        const Data = data.data
+                        console.log(Data)
+                        if(Data.code === 200){
+                            that.$message.success('注册成功!')
+                            that.$router.push('/login')
+                        } else {
+                            const msg = Data.errMsg
+                            console.log(msg)
+                            if ((typeof msg) === 'string') {
+                                that.$message.error(msg)
+                            } else {
+                                for(const item in msg) {
+                                    that.$message.error(msg[item][0])
                                 }
-                            })
+                            }
+                        }
                     })
                     .catch(function (error) {
                         if (error.response) {
-                            var tmp = error.response.data.msg
-                            if ((typeof tmp) === 'string') {
-                                that.$message.error(tmp)
-                            } else {
-                                for (const index in tmp) {
-                                    that.$message.error(tmp[index][0])
-                                    break
-                                }
-                            }
+                            console.log(error.response)
+                            that.$message.error('系统错误')
                         }
                     })
             },
@@ -139,7 +131,6 @@
             }
         },
         created () {
-            this.getCaptcha()
         }
     }
 </script>
