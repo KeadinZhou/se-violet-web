@@ -26,13 +26,94 @@
         },
         data () {
             return {
+                flag:false,
                 title: '',
                 text: ''
             }
         },
         methods: {
             sendPost () {
-                this.$message.success('发送成功！！！')
+                if (!this.noTitle)
+                {
+                    const that= this
+                    if (!that.title){
+                        that.$message.error('标题不能为空！')
+                        return
+                    }
+                    if (!that.text){
+                        that.$message.error('帖子内容不能为空！')
+                        return
+                    }
+                    let sendData=new FormData()
+                    sendData.append('group_id',1)
+                    sendData.append('post_title',this.title)
+                    sendData.append('content',this.text)
+                    that.$http.post(that.$store.state.api + '/v1/post/add_post', sendData)
+                        .then(data=>{
+                            const Data= data.data
+                            console.log(Data)
+                            if (Data.code===0) {
+                                that.$message.success('发送成功!')
+                                that.text = ''
+                                that.title=''
+                                that.$emit('sendOK', true)
+                            } else {
+                                const msg = Data.errMsg
+                                console.log(msg)
+                                if ((typeof msg) === 'string') {
+                                    that.$message.error(msg)
+                                } else {
+                                    for(const item in msg) {
+                                        that.$message.error(msg[item][0])
+                                    }
+                                }
+                            }
+                        })
+                        .catch(function (error) {
+                            if (error.response) {
+                                console.log(error.response)
+                                that.$message.error('系统错误')
+                            }
+                        })
+                }
+                else {
+                    const that= this
+                    if (!that.text){
+                        that.$message.error('评论内容不能为空！')
+                        return
+                    }
+                    let sendData=new FormData()
+                    sendData.append('content',that.text)
+                    sendData.append('item_type', 4)
+                    sendData.append('item_id', 1)
+                    that.$http.post(that.$store.state.api + '/v1/comment/add_comment', sendData)
+                        .then(data => {
+                            const Data = data.data
+                            console.log(Data)
+                            if(Data.code === 0){
+                                that.$message.success('评论成功!')
+                                that.text = ''
+                                that.$emit('sendOKK', true)
+                            } else {
+                                const msg = Data.errMsg
+                                console.log(msg)
+                                if ((typeof msg) === 'string') {
+                                    that.$message.error(msg)
+                                } else {
+                                    for(const item in msg) {
+                                        that.$message.error(msg[item][0])
+                                    }
+                                }
+                            }
+                        })
+                        .catch(function (error) {
+                            if (error.response) {
+                                console.log(error.response)
+                                that.$message.error('系统错误')
+                            }
+                        })
+                }
+
             }
         }
     }

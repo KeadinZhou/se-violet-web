@@ -20,7 +20,7 @@
             </div>
             <div>
                 <i class="el-icon-connection"></i>&nbsp;
-                <el-link style="font-size: 14px">{{postData.group_name}}</el-link>
+                <el-link style="font-size: 14px">{{postData.time}}</el-link>
             </div>
         </div>
     </div>
