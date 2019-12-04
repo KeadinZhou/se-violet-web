@@ -1,8 +1,8 @@
 <template>
     <div>
         <group-page-head></group-page-head>
-        <post-list-frame></post-list-frame>
-        <post-sender></post-sender>
+        <post-list-frame v-if="show"></post-list-frame>
+        <post-sender @sendOK="refresh"></post-sender>
     </div>
 </template>
 
@@ -16,6 +16,20 @@
             'post-list-frame': PostListFrame,
             'group-page-head': GroupPageHead,
             'post-sender': PostSender
+        },
+        data () {
+            return {
+                show: true
+        }
+        },
+        methods: {
+            refresh () {
+                const that = this
+                that.show = false
+                that.$nextTick(() => {
+                    that.show = true
+                })
+            }
         }
     }
 </script>

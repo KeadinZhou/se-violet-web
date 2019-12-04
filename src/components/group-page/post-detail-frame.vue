@@ -22,7 +22,7 @@
                         <div class="moment-about">
                         </div>
                         <div class="comment-star-box">
-                            <el-badge :value="momentData.star_cnt" class="comment-star-button" type="primary" :max="999">
+                            <el-badge :value="momentData.star_cnt" class="comment-star-button" type="primary" :max="999" :hidden="!momentData.star_cnt">
                                 <span @click="star()"><i :class="momentData.i_stared?'el-icon-star-on':'el-icon-star-off'"></i></span>
                             </el-badge>
                         </div>
@@ -44,9 +44,31 @@
             }
         },
         methods: {
-            star () {
-                this.momentData.star_cnt += (this.momentData.i_stared ? -1 : 1)
-                this.momentData.i_stared = ! this.momentData.i_stared
+            star() {
+                const that = this
+                var sendData = new FormData()
+                sendData.append('item_type', 5)
+                sendData.append('item_id', that.momentData.comment_id)
+                that.$http.post(that.$store.state.api + '/v1/thumbs/' + (that.momentData.i_stared ? 'dislike' : 'like'), sendData)
+                    .then(data => {
+                        const Data = data.data
+                        console.log(Data)
+                        if (Data.code === 0) {
+                            that.momentData.star_cnt += (that.momentData.i_stared ? -1 : 1)
+                            that.momentData.i_stared = !that.momentData.i_stared
+                            that.$message.success((that.momentData.i_stared ? '' : '取消') + '点赞成功!')
+                        } else {
+                            const msg = Data.errMsg
+                            console.log(msg)
+                            if ((typeof msg) === 'string') {
+                                that.$message.error(msg)
+                            } else {
+                                for (const item in msg) {
+                                    that.$message.error(msg[item][0])
+                                }
+                            }
+                        }
+                    })
             }
         }
     }
