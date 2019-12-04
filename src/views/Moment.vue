@@ -37,7 +37,7 @@
                                     moment_id: item.zone_id,
                                     user_id: item.user_id,
                                     user_nickname: item.user_nickname,
-                                    user_url: '#',
+                                    user_url: '#/user?userid=' + item.user_id,
                                     img_url: that.$store.state.headurl + item.user_id % 30,
                                     time: item.create_time,
                                     content: item.content,

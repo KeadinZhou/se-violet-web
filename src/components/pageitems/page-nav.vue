@@ -15,7 +15,7 @@
                 </span>
                 <el-dropdown-menu slot="dropdown">
                     <template v-if="this.$store.state.user.permission !== -9">
-                        <el-dropdown-item command="setting">账户设置</el-dropdown-item>
+                        <el-dropdown-item command="user">个人主页</el-dropdown-item>
                         <el-dropdown-item command="logout">退出登录</el-dropdown-item>
                     </template>
                     <template v-else>
@@ -42,6 +42,9 @@
                 }
                 if (command === 'login') {
                     this.$router.push('/login')
+                }
+                if (command === 'user') {
+                    this.$router.push('/user')
                 }
                 if (command === 'logout') {
                     this.$store.commit('logoutUser')

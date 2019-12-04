@@ -9,6 +9,7 @@ import Register from "@/views/Register"
 import Moment from "@/views/Moment"
 import Group from "@/views/Group"
 import Post from "@/views/Post"
+import User from "@/views/User"
 
 Vue.use(VueRouter)
 
@@ -49,6 +50,10 @@ const routes = [
         path: '/post',
         name: 'post',
         component: Post
+    }, {
+        path: '/user',
+        name: 'user',
+        component: User
     }
 ]
 
