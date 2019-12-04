@@ -92,6 +92,7 @@
                                 })
                             }
                             if (open) this.showComments = ! this.showComments
+                            that.momentData.comment_cnt = that.commentsList.length
                         } else {
                             const msg = Data.errMsg
                             console.log(msg)

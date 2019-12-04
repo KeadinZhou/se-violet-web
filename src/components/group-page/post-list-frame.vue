@@ -206,12 +206,12 @@
                             for (const item of Data.data){
                                 console.log(item)
                                 that.postList.push({
-                                    post_id: item.group_name,
+                                    post_id: item.post_id,
                                     reply_cnt: item.reply_cnt,
                                     title: item.post_title,
                                     content:item.content,
                                     url:'#/post',
-                                    time: item.recent_time.substring(5),
+                                    group_name: item.recent_time.substring(5),
                                     user_id:item.user_id,
                                     user_nickname:item.owner_nickname,
                                     gruop_id:item.group_id
