@@ -4,6 +4,7 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 const api = 'http://shysimon.cn:5000'
+const headurl = 'http://kealine.top/SE/head/'
 // const api = 'http://10.66.2.108:5000'
 
 const USER_NULL={
@@ -17,6 +18,7 @@ export default new Vuex.Store({
   state: {
     page: null,
     api: api,
+    headurl: headurl,
     user: USER_NULL
   },
   mutations: {
@@ -34,7 +36,8 @@ export default new Vuex.Store({
                 userid: Data.user.userId,
                 email:  Data.user.email,
                 nickname: Data.user.userNickName,
-                permission: Data.user.userType
+                permission: Data.user.userType,
+                img: state.headurl + Data.user.userId % 30
               }
             } else {
               const msg = Data.errMsg
@@ -66,7 +69,7 @@ export default new Vuex.Store({
               console.log(state.user)
               console.log(USER_NULL)
               that.$message.success('登出成功!')
-              // location.reload()
+              that.$router.push('/')
             } else {
               const msg = Data.errMsg
               console.log(msg)

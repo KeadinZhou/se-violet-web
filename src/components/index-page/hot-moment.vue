@@ -14,7 +14,7 @@
 
 <script>
     import ContentFrame from '@/components/pageitems/content-frame'
-    import MomentFrame from '@/components/pageitems/moment-frame'
+    import MomentFrame from '@/components/moment-page/moment-frame'
     export default {
         name: "hot-moment",
         components: {
