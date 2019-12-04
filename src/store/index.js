@@ -5,6 +5,8 @@ Vue.use(Vuex)
 
 const api = 'http://shysimon.cn:5000'
 const headurl = 'http://kealine.top/SE/head/'
+const groupurl = 'http://kealine.top/SE/group/'
+const playlistpurl = 'http://kealine.top/SE/playlist/'
 // const api = 'http://10.66.2.108:5000'
 
 const USER_NULL={
@@ -29,7 +31,16 @@ export default new Vuex.Store({
     headurl: headurl,
     user: USER_NULL,
     playList: PLAY_LIST,
-    nowPlaying: PLAY_LIST[0]
+    nowPlaying: PLAY_LIST[0],
+    headImg: function (id) {
+      return headurl + id%30
+    },
+    groupImg: function (id) {
+      return groupurl + (id%50 + 50)
+    },
+    playlistImg: function (id) {
+      return playlistpurl + (id%30 + 20)
+    }
   },
   mutations: {
     savePage (state, page) {
@@ -48,16 +59,6 @@ export default new Vuex.Store({
                 nickname: Data.user.userNickName,
                 permission: Data.user.userType,
                 img: state.headurl + Data.user.userId % 30
-              }
-            } else {
-              const msg = Data.errMsg
-              console.log(msg)
-              if ((typeof msg) === 'string') {
-                that.$message.error(msg)
-              } else {
-                for(const item in msg) {
-                  that.$message.error(msg[item][0])
-                }
               }
             }
           })

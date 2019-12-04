@@ -20,7 +20,7 @@
         data () {
             return {
                 show: true
-        }
+            }
         },
         methods: {
             refresh () {
