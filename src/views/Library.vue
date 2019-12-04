@@ -3,7 +3,7 @@
         <div class="search-box">
             <img src="@/assets/logo.png" alt="" width="180px">
             <div style="margin: 20px"></div>
-            <el-input placeholder="键入关键词在曲库中进行搜索" v-model="keyword">
+            <el-input placeholder="键入关键词在曲库中进行搜索" v-model="input">
                 <el-button slot="append" icon="el-icon-search" @click="resShow=true"></el-button>
             </el-input>
         </div>

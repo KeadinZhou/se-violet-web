@@ -122,6 +122,25 @@
                     }
                 ]
             }
+        },
+        methods:{
+            getData(){
+                const that= this
+                that.$http.post(that.$store.state.api+'/v1/group/load_group')
+                    .then(data =>{
+                        const Data=data.data
+                        console.log(Data)
+                        if (Data.code==0){
+                            that.groupList=[]
+                            for (const item of Data.data){
+                                that.momentsList.push({
+
+                                })
+                            }
+                        }
+                })
+            }
+
         }
     }
 </script>
