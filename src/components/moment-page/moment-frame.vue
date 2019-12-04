@@ -37,7 +37,7 @@
             <el-collapse-transition>
                 <div v-if="showComments">
                     <el-divider><i class="el-icon-chat-square"></i></el-divider>
-                    <comment-sender :item_id="momentData.moment_id" :item_type="6"></comment-sender>
+                    <comment-sender :item_id="momentData.moment_id" :item_type="6" @sendOK="getData(false)"></comment-sender>
                     <comment-frame
                             v-for="(item,index) in commentsList"
                             :key="index"
@@ -64,39 +64,59 @@
         data () {
             return {
                 showComments: false,
-                commentsList: [{
-                    comment_id: '518515',
-                    img_url: 'http://kealine.top/SE/img/head/mmexport1530331604617.png',
-                    user_id: '15151',
-                    user_nickname: 'Shoegazerbaby',
-                    time: '2019-10-31 17:59',
-                    content: '我瞎说的',
-                    star_cnt: 999,
-                    i_stared: false
-                }, {
-                    comment_id: '518515',
-                    img_url: 'http://kealine.top/SE/img/head/mmexport1530331602313.jpg',
-                    user_id: '15151',
-                    user_nickname: 'Keadin',
-                    time: '2019-10-31 17:59',
-                    content: '纯路人 有一说一 确实',
-                    star_cnt: 666,
-                    i_stared: true
-                }, {
-                    comment_id: '518515',
-                    img_url: 'http://kealine.top/SE/img/head/mmexport1530331604614.jpg',
-                    user_id: '15151',
-                    user_nickname: '南國',
-                    time: '2019-10-31 17:59',
-                    content: '哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈艹',
-                    star_cnt: 0,
-                    i_stared: false
-                }]
+                commentsList: []
             }
         },
         methods: {
+            getData (open) {
+                const that = this
+                var sendData = new FormData()
+                sendData.append('item_type', 6)
+                sendData.append('item_id', that.momentData.moment_id)
+                that.$http.post(that.$store.state.api + '/v1/comment/load_comment', sendData)
+                    .then(data => {
+                        const Data = data.data
+                        console.log(Data)
+                        if(Data.code === 0){
+                            that.commentsList = []
+                            for(const item of Data.data) {
+                                that.commentsList.push({
+                                    comment_id: item.comment_id,
+                                    img_url: that.$store.state.headurl + item.user_id % 30,
+                                    user_id: item.user_id,
+                                    user_nickname: item.user_nickname,
+                                    time: item.create_time,
+                                    content: item.content,
+                                    star_cnt: item.thumbs_up_num,
+                                    i_stared: item.is_liked
+                                })
+                            }
+                            if (open) this.showComments = ! this.showComments
+                        } else {
+                            const msg = Data.errMsg
+                            console.log(msg)
+                            if ((typeof msg) === 'string') {
+                                that.$message.error(msg)
+                            } else {
+                                for(const item in msg) {
+                                    that.$message.error(msg[item][0])
+                                }
+                            }
+                        }
+                    })
+                    .catch(function (error) {
+                        if (error.response) {
+                            console.log(error.response)
+                            that.$message.error('系统错误')
+                        }
+                    })
+            },
             commentSwitch () {
-                this.showComments = ! this.showComments
+                if (this.showComments) {
+                    this.showComments = ! this.showComments
+                } else {
+                    this.getData(true)
+                }
             },
             star () {
                 const that = this

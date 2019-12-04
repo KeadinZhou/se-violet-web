@@ -25,8 +25,36 @@
         },
         methods: {
             star () {
-                this.commentData.star_cnt += (this.commentData.i_stared ? -1 : 1)
-                this.commentData.i_stared = ! this.commentData.i_stared
+                const that = this
+                var sendData = new FormData()
+                sendData.append('item_type', 5)
+                sendData.append('item_id', that.commentData.comment_id)
+                that.$http.post(that.$store.state.api + '/v1/thumbs/' + (that.commentData.i_stared ? 'dislike' : 'like'), sendData)
+                    .then(data => {
+                        const Data = data.data
+                        console.log(Data)
+                        if(Data.code === 0){
+                            that.commentData.star_cnt += (that.commentData.i_stared ? -1 : 1)
+                            that.commentData.i_stared = ! that.commentData.i_stared
+                            that.$message.success((that.commentData.i_stared?'':'取消')+'点赞成功!')
+                        } else {
+                            const msg = Data.errMsg
+                            console.log(msg)
+                            if ((typeof msg) === 'string') {
+                                that.$message.error(msg)
+                            } else {
+                                for(const item in msg) {
+                                    that.$message.error(msg[item][0])
+                                }
+                            }
+                        }
+                    })
+                    .catch(function (error) {
+                        if (error.response) {
+                            console.log(error.response)
+                            that.$message.error('系统错误')
+                        }
+                    })
             }
         }
     }
