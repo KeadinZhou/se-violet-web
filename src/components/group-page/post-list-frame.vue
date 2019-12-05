@@ -21,14 +21,23 @@
         },
         data () {
             return {
+                group_id: '',
                 postList: []
             }
         },
         methods:{
+            getGroupId () {
+                const that = this
+                if (that.$route.query.groupid) {
+                    that.group_id = Number(that.$route.query.groupid)
+                } else {
+                    that.$router.push('/groups')
+                }
+            },
             getData(){
                 const that= this
                 let sendData = new FormData()
-                sendData.append('group_id',1)
+                sendData.append('group_id',that.group_id)
                 that.$http.post(that.$store.state.api+'/v1/post/load_post',sendData)
                     .then(data =>{
                         const Data=data.data
@@ -39,10 +48,10 @@
                                 console.log(item)
                                 that.postList.push({
                                     post_id: item.post_id,
-                                    reply_cnt: item.reply_cnt,
+                                    reply_cnt: item.comment_count,
                                     title: item.post_title,
                                     content:item.content,
-                                    url:'#/post',
+                                    url:'#/post?postid='+item.post_id,
                                     group_name: item.recent_time.substring(5),
                                     user_id:item.user_id,
                                     user_nickname:item.owner_nickname,
@@ -70,8 +79,16 @@
                     })
             }
         },
-        created(){
-            this.getData()
+        created () {
+            this.getGroupId()
+        },
+        watch: {
+            '$route' () {
+                this.getGroupId()
+            },
+            group_id: function () {
+                this.getData()
+            }
         }
     }
 </script>

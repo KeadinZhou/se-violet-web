@@ -1,12 +1,12 @@
 <template>
     <div>
-        <group-page-head post-title="虚空黑暗里的一线光明和希望回声"></group-page-head>
+        <group-page-head post-title="post_name"></group-page-head>
         <post-detail-frame
             v-for="(item,index) in commentsList"
             :key="index"
             :moment-data="item">
         </post-detail-frame>
-        <post-sender no-title @sendOKK="getData"></post-sender>
+        <post-sender :Item_id="Item_Id" :group_id="group_id" no-title @sendOKK="getData"></post-sender>
     </div>
 </template>
 
@@ -22,65 +22,36 @@
             'post-detail-frame': PostDetailFrame
         },
         data () {
-
             return {
+                post_name:'',
                 show: true,
-                commentsList: []
-                // {
-                //     moment_id: 123124124,
-                //     user_id: 2341234,
-                //     user_nickname: 'Shoegazerbaby',
-                //     user_url: '#',
-                //     img_url: 'http://kealine.top/SE/img/head/mmexport1530331604617.png',
-                //     time: '2019-10-31 17:59',
-                //     content: '平克弗洛伊德在这张名为《Meddle》的第六张专辑中，终于产生了脱离Syd Barrett之后的第一首经典代表作——《Echoes》。歌名就像他们制作这张专辑的过程一样。回声——像是乐队的前进方向有了回应，乐迷也给予了积极的反馈。犹如一个人走在空旷黑暗的环境中，喊了一声，若没有回音，可知面临的是怎样的空旷。1971年，皇后乐队成立，披头士则已经散伙一年。朋克浪潮还在孕育中，那群组成Sex Pistols的混子们还没有长大。',
-                //     about: 'Pink Floyd - Meddle',
-                //     about_url: '#',
-                //     comment_cnt: 3,
-                //     star_cnt: 225,
-                //     i_stared: false
-                // }, {
-                //     moment_id: 123124124,
-                //     user_id: 2341234,
-                //     user_nickname: '南國',
-                //     user_url: '#',
-                //     img_url: 'http://kealine.top/SE/img/head/mmexport1530331604619.jpg',
-                //     time: '2019-10-31 17:59',
-                //     content: '唱出了多少人相似的童年，回不去的过去，想流泪却流不出来，怀念以前的时光。时代在呐喊，就给我们太多的虚叹，为了生活苟延残喘，忘记了给曾经的朋友一声问候，忘记了给父母一些关怀，忘记了什么时候回过一次家。想起以前和小伙伴一起跳皮筋，弹玻璃珠，打纸面包，每天下午放学回家无忧无虑的和小伙伴玩耍。现在的社会再也不会有那种感觉了，哪怕是现在的小孩子也找不到那个年代的纯真。虽然条件差但是每个人的过的踏实……',
-                //     about: '许嵩 - 雨幕',
-                //     about_url: '#',
-                //     comment_cnt: 3,
-                //     star_cnt: 999,
-                //     i_stared: false
-                // }, {
-                //     moment_id: 123124124,
-                //     user_id: 2341234,
-                //     user_nickname: 'Keadin',
-                //     user_url: '#',
-                //     img_url: 'http://kealine.top/SE/img/head/mmexport1530331604614.jpg',
-                //     time: '2019-10-31 17:59',
-                //     content: '当周蕙的《Angel face》在耳边响起，我仿佛又被音乐那神奇的魔力打开了记忆，在《预言》中彻底融化了。 我很庆幸自己出身在80年代，在那个流行音乐还是那么纯粹的年代里，有着福茂唱片的陪伴。 在那个时候，我很喜欢一个台湾的女歌手叫范晓萱，在《深呼吸》的MTV里，一个白色连衣裙的少女，清澈如水，美丽如花，唱着淡淡的情歌，那时我顿然诧异，世间还有如此清纯的女子。是啊，只是被表象迷惑了，只是被一瞬间的悸动困住了内心，只是被比花还要美的容颜释放了激动。',
-                //     about: '周蕙 - Angel face',
-                //     about_url: '#',
-                //     comment_cnt: 3,
-                //     star_cnt: 1520,
-                //     i_stared: false
-                // }]
+                commentsList: [],
+                Item_Id: '',
+                group_id:''
             }
         },
         methods:{
+            getItemId () {
+                const that = this
+                if (that.$route.query.postid) {
+                    that.Item_id = Number(that.$route.query.postid)
+                } else {
+                    that.$router.push('/posts')
+                }
+            },
             getData() {
                 const that = this
                 var sendData = new FormData()
-                sendData.append('item_type', 4)
-                sendData.append('item_id', 1)
-                that.$http.post(that.$store.state.api + '/v1/comment/load_comment', sendData)
+                sendData.append('post_id', that.Item_Id)
+                that.$http.post(that.$store.state.api + '/v1/post/load_post_by_id', sendData)
                     .then(data => {
                         const Data = data.data
+
                         console.log(Data)
-                        if (Data.code === 0) {
+                        if(Data.code === 0){
+                            that.post_name=Data.data[0].post_title
                             that.commentsList = []
-                            for (const item of Data.data) {
+                            for (const item of Data.comments) {
                                 that.commentsList.push({
                                     comment_id: item.comment_id,
                                     img_url: that.$store.state.headurl + item.user_id % 30,
@@ -99,7 +70,7 @@
                             if ((typeof msg) === 'string') {
                                 that.$message.error(msg)
                             } else {
-                                for (const item in msg) {
+                                for(const item in msg) {
                                     that.$message.error(msg[item][0])
                                 }
                             }
@@ -113,8 +84,16 @@
                     })
             }
         },
-        created(){
-            this.getData()
+        created () {
+            this.getItemId()
+        },
+        watch: {
+            '$route' () {
+                this.getItemId()
+            },
+            Item_Id: function () {
+                this.getData()
+            }
         }
     }
 </script>

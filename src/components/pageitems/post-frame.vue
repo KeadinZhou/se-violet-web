@@ -1,13 +1,14 @@
 <template>
     <div class="post-frame">
         <div class="post-left-icon">
-            <el-badge :value="postData.reply_cnt" type="primary">
+            <el-badge :value="postData.reply_cnt" type="primary" :hidden="postData.reply_cnt!==0">
                 <i class="el-icon-chat-round" style="font-size: 30px"></i>
             </el-badge>
         </div>
         <div class="post-middle-box">
             <div>
-                <el-link :href="postData.url" type="primary" class="post-title"><b>{{postData.title}}</b></el-link>
+                <el-link :href="postData.url" type="primary" class="post-title">
+                    <b>{{postData.title}}</b></el-link>
             </div>
             <div class="post-content">
                 {{longCut(postData.content,100)}}

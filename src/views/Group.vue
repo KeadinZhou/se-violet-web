@@ -2,7 +2,7 @@
     <div>
         <group-page-head></group-page-head>
         <post-list-frame v-if="show"></post-list-frame>
-        <post-sender @sendOK="refresh"></post-sender>
+        <post-sender :gruop_id="group_id" :Item_id="Item_id" @sendOK="refresh"></post-sender>
     </div>
 </template>
 
@@ -19,18 +19,37 @@
         },
         data () {
             return {
-                show: true
+                show: true,
+                group_id: '',
+                Item_id:null
             }
         },
         methods: {
-            refresh () {
+            refresh() {
                 const that = this
                 that.show = false
                 that.$nextTick(() => {
                     that.show = true
                 })
+            },
+            getGroupId() {
+                const that = this
+                if (that.$route.query.groupid) {
+                    that.group_id = Number(that.$route.query.groupid)
+                } else {
+                    that.$router.push('/groups')
+                }
             }
+        },
+        created () {
+            this.getGroupId()
+        },
+        watch: {
+            '$route' () {
+                this.getGroupId()
+            },
         }
+
     }
 </script>
 

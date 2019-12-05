@@ -2,11 +2,11 @@
     <div>
         <div class="group-page-head">
             <div class="group-info-box">
-                <div class="group-name"><b>{{postTitle?postTitle:'文艺音乐点评'}}</b></div>
-                <div><el-button size="small" round v-if="!postTitle">加入圈子</el-button></div>
+                <div class="group-name"><b>{{groupname}}</b></div>
+                <div><el-button size="small" round v-if="groupname">加入圈子</el-button></div>
             </div>
             <div class="group-img-box">
-                <img src="http://p1.music.126.net/rIoR-AhkTjuss7Z6R-2umQ==/109951164291066712.jpg" alt="" width="200px">
+                <img :src="img" alt="" width="200px">
             </div>
         </div>
         <div class="head-bottom-line"></div>
@@ -16,8 +16,63 @@
 <script>
     export default {
         name: "group-page-head",
-        props: {
-            postTitle: String
+        data() {
+            return{
+                groupname:'',
+                img:null,
+                group_id: ''
+            }
+        },
+        methods: {
+            getGroupId() {
+                const that = this
+                if (that.$route.query.groupid) {
+                    that.group_id = Number(that.$route.query.groupid)
+                } else {
+                    that.$router.push('/groups')
+                }
+            },
+            getData() {
+                const that = this
+                var sendData = new FormData()
+                sendData.append('group_id', that.group_id)
+                that.$http.post(that.$store.state.api + '/v1/group/load_group_by_id', sendData)
+                    .then(data => {
+                        const Data = data.data
+                        console.log(Data)
+                        if (Data.code === 0) {
+                            that.groupname = Data.data[0].group_name
+                            that.img = that.$store.state.groupImg(that.group_id)
+                        } else {
+                            const msg = Data.errMsg
+                            console.log(msg)
+                            if ((typeof msg) === 'string') {
+                                that.$message.error(msg)
+                            } else {
+                                for (const item in msg) {
+                                    that.$message.error(msg[item][0])
+                                }
+                            }
+                        }
+                    })
+                    .catch(function (error) {
+                        if (error.response) {
+                            console.log(error.response)
+                            that.$message.error('系统错误')
+                        }
+                    })
+            }
+        },
+        created() {
+            this.getGroupId()
+        },
+        watch: {
+            '$route'() {
+                this.getGroupId()
+            },
+            group_id: function () {
+                this.getData()
+            }
         }
     }
 </script>

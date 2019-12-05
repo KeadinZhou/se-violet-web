@@ -22,13 +22,15 @@
     export default {
         name: "post-sender",
         props: {
-            noTitle: Boolean
+            noTitle: Boolean,
+            group_id:String,
+            Item_id: String
         },
         data () {
             return {
                 flag:false,
                 title: '',
-                text: ''
+                text: '',
             }
         },
         methods: {
@@ -45,7 +47,7 @@
                         return
                     }
                     let sendData=new FormData()
-                    sendData.append('group_id',1)
+                    sendData.append('group_id',this.group_id)
                     sendData.append('post_title',this.title)
                     sendData.append('content',this.text)
                     that.$http.post(that.$store.state.api + '/v1/post/add_post', sendData)
@@ -85,7 +87,7 @@
                     let sendData=new FormData()
                     sendData.append('content',that.text)
                     sendData.append('item_type', 4)
-                    sendData.append('item_id', 1)
+                    sendData.append('item_id', that.Item_id)
                     that.$http.post(that.$store.state.api + '/v1/comment/add_comment', sendData)
                         .then(data => {
                             const Data = data.data
