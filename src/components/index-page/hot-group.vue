@@ -61,6 +61,49 @@
                     }
                 ]
             }
+        },
+        methods:{
+            getData(){
+                const that= this
+                that.$http.post(that.$store.state.api+'/v1/group/index_groups')
+                    .then(data =>{
+                        const Data=data.data
+                        console.log(Data)
+                        if (Data.code === 0 ){
+                            that.groupList=[]
+                            for (const item of Data.data){
+                                console.log(item)
+                                that.groupList.push({
+                                    group_name: item.group_name,
+                                    member_cnt: item.follow_num,
+                                    img_url:  that.$store.state.groupImg(item.group_id),
+                                    url:'#/group?groupid='+item.group_id,
+                                    info:item.info,
+                                    owner_id: item.user_id
+                                })
+                            }
+                        }else {
+                            const msg=Data.msg
+                            console.log(msg)
+                            if ((typeof msg) === 'string') {
+                                that.$message.error(msg)
+                            } else {
+                                for(const item in msg) {
+                                    that.$message.error(msg[item][0])
+                                }
+                            }
+                        }
+                    })
+                    .catch(function (error) {
+                        if (error.response) {
+                            console.log(error.response)
+                            that.$message.error('系统错误')
+                        }
+                    })
+            }
+        },
+        created(){
+            this.getData()
         }
     }
 </script>

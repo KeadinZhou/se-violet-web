@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="commentBox">
         <content-frame title="评论列表" :more="false" icon="el-icon-chat-line-square">
             <template v-slot:content>
                 <comment-sender :item_type="2" :item_id="playlist_id" @sendOK="getData"></comment-sender>
