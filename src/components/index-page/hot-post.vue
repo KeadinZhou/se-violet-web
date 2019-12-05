@@ -92,7 +92,7 @@
                                 console.log(item)
                                 that.postList.push({
                                     post_id: item.post_id,
-                                    reply_cnt: item.reply_cnt,
+                                    reply_cnt: item.comment_count,
                                     title: item.post_title,
                                     content:item.content,
                                     url:'#/post?postid='+item.post_id,

@@ -16,10 +16,11 @@
         data () {
             return {
                 imgList: [
-                    'http://kealine.top/SE/img/big/mxcp_1572420345368_109951164457734015.jpg',
-                    'http://kealine.top/SE/img/big/mxcp_1572420369681_109951164457731257.jpg',
-                    'http://kealine.top/SE/img/big/mxcp_1572519326336_109951164458569349.jpg',
-                    'http://kealine.top/SE/img/big/mxcp_1572420388094_109951164457739003.jpg',
+                    'http://kealine.top/SE/bigimg/0',
+                    'http://kealine.top/SE/bigimg/1',
+                    'http://kealine.top/SE/bigimg/2',
+                    'http://kealine.top/SE/bigimg/3',
+                    'http://kealine.top/SE/bigimg/4'
                 ]
             }
         }
