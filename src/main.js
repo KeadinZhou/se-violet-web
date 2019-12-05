@@ -27,3 +27,7 @@ router.beforeEach((to, from, next) => {
   }
   next()
 })
+
+router.afterEach(() => {
+  document.querySelector('#page-top').scrollIntoView()
+})

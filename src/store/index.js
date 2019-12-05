@@ -32,6 +32,7 @@ export default new Vuex.Store({
     user: USER_NULL,
     playList: PLAY_LIST,
     nowPlaying: PLAY_LIST[0],
+    myPlayList: [],
     headImg: function (id) {
       return headurl + id%30
     },
@@ -103,6 +104,9 @@ export default new Vuex.Store({
     addSong(state, data) {
       state.playList.push(data)
       state.nowPlaying = data
+    },
+    updateMyPlayList (state, data) {
+      state.myPlayList = data
     }
   },
   actions: {

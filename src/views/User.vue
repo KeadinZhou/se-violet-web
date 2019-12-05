@@ -1,15 +1,18 @@
 <template>
-    <div>
-        <user-page-head :user="user_info" v-if="user_info"></user-page-head>
+    <div v-if="user_info">
+        <user-page-head :user="user_info"></user-page-head>
+        <user-page-playlist :user_id="user_info.userId"></user-page-playlist>
     </div>
 </template>
 
 <script>
     import UserPageHead from '@/components/user-page/user-page-head'
+    import UserPagePlaylist from '@/components/user-page/user-page-playlist'
     export default {
         name: "User",
         components: {
-            'user-page-head': UserPageHead
+            'user-page-head': UserPageHead,
+            'user-page-playlist': UserPagePlaylist
         },
         data () {
             return {
@@ -19,14 +22,19 @@
         },
         methods: {
             getUserId () {
-                if (this.$route.query.userid) {
-                    this.user_id = this.$route.query.userid
+                const that = this
+                if (that.$route.query.userid) {
+                    that.user_id = that.$route.query.userid
                 } else {
-                    this.user_id = this.$store.state.user.userid
+                    if (!that.$store.state.user.userid) {
+                        setTimeout(()=>{that.getUserId()},500)
+                    }
+                    that.user_id = that.$store.state.user.userid
                 }
             },
             getData () {
                 const that = this
+                if(!that.user_id) return
                 var sendData = new FormData()
                 sendData.append('uid', that.user_id)
                 that.$http.post(that.$store.state.api + '/v1/user/search', sendData)

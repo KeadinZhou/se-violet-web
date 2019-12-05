@@ -5,7 +5,11 @@
                 <el-table :data="songListData">
                     <el-table-column label="#" align="center" width="90">
                         <template slot-scope="scope">
-                            <span @click="playSong(scope.row)" style="line-height: 20px">{{ scope.$index+1 }} <i class="el-icon-video-play play-button"></i></span>
+                            <span @click="playSong(scope.row)" :title="'立即播放 '+scope.row.song_name"><i class="el-icon-video-play play-button"></i></span>
+                            <el-popover placement="left" width="160" v-model="addListShow[scope.$index]">
+                                <add-song-to-list :song_id="scope.row.song_id" @addOK="tryAddSong(scope.$index)"></add-song-to-list>
+                                <span @click="tryAddSong(scope.$index)" :title="'将 '+scope.row.song_name+ ' 加入歌单'" slot="reference"><i class="el-icon-circle-plus-outline play-button"></i></span>
+                            </el-popover>
                         </template>
                     </el-table-column>
                     <el-table-column label="歌曲标题" align="left" width="400">
@@ -39,10 +43,12 @@
 
 <script>
     import ContentFrame from '@/components/pageitems/content-frame'
+    import AddSongToList from '@/components/pageitems/add-song-to-list'
     export default {
         name: "song-list-frame",
         components: {
-            'content-frame': ContentFrame
+            'content-frame': ContentFrame,
+            'add-song-to-list': AddSongToList
         },
         props: {
             title: String,
@@ -50,6 +56,7 @@
         },
         data () {
             return {
+                addListShow: []
             }
         },
         methods: {
@@ -113,8 +120,16 @@
                         }
                     })
             },
-            KK (data) {
-                console.log(data)
+            tryAddSong (index) {
+                console.log(this.addListShow[index])
+                this.addListShow[index] = !this.addListShow[index]
+                console.log(this.addListShow[index])
+            }
+        },
+        created () {
+            // eslint-disable-next-line no-unused-vars
+            for(const index in this.songListData){
+                this.addListShow.push(false)
             }
         }
     }
@@ -123,7 +138,8 @@
 <style scoped>
     .play-button{
         cursor: pointer;
-        /*font-size: 20px;*/
+        font-size: 20px;
+        margin-right: 10px;
     }
     .play-button:hover{
         color: #9b59b6;

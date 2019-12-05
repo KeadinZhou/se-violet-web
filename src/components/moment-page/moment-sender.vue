@@ -73,7 +73,7 @@
                             that.$message.success('发送成功!')
                             that.content = ''
                             that.senderShow = false
-                            that.$emit('sendOK', true);
+                            that.$emit('sendOK', true)
                         } else {
                             const msg = Data.errMsg
                             console.log(msg)
