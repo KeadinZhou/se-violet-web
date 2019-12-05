@@ -3,6 +3,7 @@
         <el-menu :default-active="this.$route.path" class="page-nav" style="height:60px;width:100%;z-index:1000" mode="horizontal" router>
             <el-menu-item index="/" class="nav-item" route="/">首页</el-menu-item>
             <el-menu-item index="/library" class="nav-item" route="/library">曲库</el-menu-item>
+            <el-menu-item index="/playlists" class="nav-item" route="/playlists">歌单</el-menu-item>
             <el-menu-item index="/groups" class="nav-item" route="/groups">圈子</el-menu-item>
             <template v-if="this.$store.state.user.permission !== -9">
                 <el-menu-item index="/moment" class="nav-item" route="/moment">动态</el-menu-item>

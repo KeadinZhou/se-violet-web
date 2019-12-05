@@ -10,6 +10,7 @@ import Moment from "@/views/Moment"
 import Group from "@/views/Group"
 import Post from "@/views/Post"
 import User from "@/views/User"
+import Playlists from "@/views/Playlists"
 
 Vue.use(VueRouter)
 
@@ -54,6 +55,10 @@ const routes = [
         path: '/user',
         name: 'user',
         component: User
+    }, {
+        path: '/playlists',
+        name: 'playlists',
+        component: Playlists
     }
 ]
 

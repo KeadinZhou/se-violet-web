@@ -107,6 +107,10 @@ export default new Vuex.Store({
     },
     updateMyPlayList (state, data) {
       state.myPlayList = data
+    },
+    updatePlayList (state, data) {
+      state.playList = data
+      state.nowPlaying = data[0]
     }
   },
   actions: {

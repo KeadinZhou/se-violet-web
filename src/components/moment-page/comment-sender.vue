@@ -43,7 +43,7 @@
                         if(Data.code === 0){
                             that.$message.success('评论成功!')
                             that.content = ''
-                            that.$emit('sendOK', true);
+                            that.$emit('sendOK', true)
                         } else {
                             const msg = Data.errMsg
                             console.log(msg)

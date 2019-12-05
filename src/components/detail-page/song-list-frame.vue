@@ -82,6 +82,7 @@
                 const that = this
                 let sendData = new FormData()
                 sendData.append('music163_id', song.music163_id)
+                sendData.append('song_id', song.song_id)
                 that.$http.post(that.$store.state.api + '/v1/song/geturl', sendData)
                     .then(data => {
                         const Data = data.data
