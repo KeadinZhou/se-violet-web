@@ -1,6 +1,6 @@
 <template>
     <div>
-        <detail-page-head v-if="playlist_info" :info="playlist_info" @playall="playAllSongs"></detail-page-head>
+        <detail-page-head v-if="playlist_info" :info="playlist_info" @playall="playAllSongs" :is-loading="isLoading"></detail-page-head>
         <song-list-frame v-if="songs" :song-list-data="songs"></song-list-frame>
         <detail-page-comment v-if="playlist_id" :playlist_id="playlist_id"></detail-page-comment>
     </div>
@@ -23,7 +23,8 @@
                 playlist_info: null,
                 songs: null,
                 allSongs: null,
-                okCnt: 0
+                okCnt: 0,
+                isLoading: false
             }
         },
         methods: {
@@ -45,6 +46,7 @@
                     that.$store.commit('updatePlayList', that.allSongs)
                     setTimeout(()=>{
                         document.getElementsByTagName("audio")[0].play()
+                        that.isLoading = false
                     }, 1000)
                 }
             },
@@ -60,6 +62,7 @@
                 const that = this
                 that.allSongs = []
                 that.okCnt = 0
+                that.isLoading = true
                 for(const song of that.songs){
                     let sendData = new FormData()
                     sendData.append('music163_id', song.music163_id)

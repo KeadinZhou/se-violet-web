@@ -5,7 +5,7 @@
             <div class="detail-page-title-box">
                 <div class="detail-page-title">{{info.sheet_name}}&nbsp;&nbsp;<el-tag>{{info.owner_id===0?'专辑':'歌单'}}</el-tag></div>
                 <div class="detail-page-user" v-if="info.owner_id!==0">
-                    <span><i class="el-icon-user"></i>&nbsp;<el-link style="font-size: 16px" :href="'/user?userid='+owner_id">{{info.owner}}</el-link></span>
+                    <span><i class="el-icon-user"></i>&nbsp;<el-link style="font-size: 16px" :href="'#/user?userid='+info.owner_id">{{info.owner}}</el-link></span>
                     <span style="color: #72767b;margin-left: 20px">创建</span>
                 </div>
                 <div class="detail-page-data">
@@ -15,11 +15,11 @@
                 </div>
                 <div class="detail-page-description">简介：{{info.info?info.info:'无'}}</div>
                 <div class="buttons-box">
-                    <el-button class="detail-page-button" type="primary" icon="el-icon-caret-right" @click="playAll">播放</el-button>
+                    <el-button class="detail-page-button" type="primary" icon="el-icon-caret-right" @click="playAll" :loading="isLoading">播放</el-button>
                     <el-button class="detail-page-button" plain icon="el-icon-star-off">收藏</el-button>
                     <el-button class="detail-page-button" plain icon="el-icon-share">分享</el-button>
                     <el-button class="detail-page-button" plain icon="el-icon-download">下载</el-button>
-                    <el-button class="detail-page-button" plain icon="el-icon-chat-line-square">评论</el-button>
+                    <el-button class="detail-page-button" plain icon="el-icon-chat-line-square" @click="gotoComment">评论</el-button>
                 </div>
             </div>
         </div>
@@ -30,11 +30,15 @@
     export default {
         name: "detail-page-head",
         props: {
-            info: Object
+            info: Object,
+            isLoading: Boolean
         },
         methods: {
             playAll () {
                 this.$emit('playall', true)
+            },
+            gotoComment () {
+                document.querySelector('#commentBox').scrollIntoView()
             }
         }
     }
