@@ -1,5 +1,5 @@
 <template>
-    <content-frame title="热门歌单" more>
+    <content-frame title="热门歌单" more="/playlists">
         <template v-slot:content>
             <div class="hot-playlist-box">
                 <img-name-box

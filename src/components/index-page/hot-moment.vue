@@ -1,5 +1,5 @@
 <template>
-    <content-frame title="热门动态" icon="el-icon-collection" more>
+    <content-frame title="热门动态" icon="el-icon-collection" more="/moment">
         <template v-slot:content>
             <div class="hot-moment-box">
                  <moment-frame

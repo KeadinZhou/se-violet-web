@@ -1,5 +1,5 @@
 <template>
-    <content-frame title="热门帖子" icon="el-icon-chat-line-square" more>
+    <content-frame title="热门帖子" icon="el-icon-chat-line-square">
         <template v-slot:content>
             <div class="hot-postlist-box">
                 <post-frame v-for="(item,index) in postList" :key="index" :post-data="item"></post-frame>
@@ -96,11 +96,11 @@
                                     title: item.post_title,
                                     content:item.content,
                                     url:'#/post?postid='+item.post_id,
-                                    group_name: item.recent_time.substring(5),
+                                    group_name: item.group_name,
                                     user_id:item.user_id,
                                     user_nickname:item.owner_nickname,
-                                    gruop_id:item.group_id
-
+                                    gruop_id:item.group_id,
+                                    link: '#/group?groupid='+item.group_id
                                 })
                             }
                         }else {

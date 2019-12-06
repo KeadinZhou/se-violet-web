@@ -2,7 +2,7 @@
     <div class="frame-box">
         <div class="frame-top" v-if="!noTitle">
             <span class="frame-title"><i :class="icon?icon:'el-icon-headset'" style="color: #9b59b6"></i><b> {{title}}</b></span>
-            <el-button type="text" style="float: right" v-if="more">更多</el-button>
+            <el-button type="text" style="float: right" v-if="more" @click="gotoPage(more)">更多</el-button>
         </div>
         <div class="frame-line"></div>
         <div class="frame-content">
@@ -16,9 +16,14 @@
         name: "content-frame",
         props: {
             title: String,
-            more: Boolean,
+            more: String,
             icon: String,
             noTitle: Boolean
+        },
+        methods: {
+            gotoPage (url){
+                this.$router.push(url)
+            }
         }
     }
 </script>

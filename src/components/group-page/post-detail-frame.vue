@@ -29,6 +29,7 @@
                     </div>
                 </div>
             </div>
+        <el-divider></el-divider>
     </div>
 </template>
 
@@ -36,7 +37,8 @@
     export default {
         name: "post-detail-frame",
         props: {
-            momentData: Object
+            momentData: Object,
+            isPost: Boolean
         },
         data () {
             return {
@@ -47,7 +49,7 @@
             star() {
                 const that = this
                 var sendData = new FormData()
-                sendData.append('item_type', 5)
+                sendData.append('item_type', that.isPost?4:5)
                 sendData.append('item_id', that.momentData.comment_id)
                 that.$http.post(that.$store.state.api + '/v1/thumbs/' + (that.momentData.i_stared ? 'dislike' : 'like'), sendData)
                     .then(data => {

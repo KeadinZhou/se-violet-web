@@ -1,6 +1,7 @@
 <template>
     <div>
-        <group-page-head post-title="post_name"></group-page-head>
+        <group-page-head v-if="postData" is-post :post-title="postData.post_title" :group-id="postData.group_id"></group-page-head>
+        <post-detail-frame :moment-data="post" is-post></post-detail-frame>
         <post-detail-frame
             v-for="(item,index) in commentsList"
             :key="index"
@@ -24,17 +25,18 @@
         data () {
             return {
                 post_name:'',
-                show: true,
                 commentsList: [],
                 Item_Id: '',
-                group_id:''
+                group_id:'',
+                postData: null,
+                post: null
             }
         },
         methods:{
             getItemId () {
                 const that = this
                 if (that.$route.query.postid) {
-                    that.Item_id = Number(that.$route.query.postid)
+                    that.Item_Id = Number(that.$route.query.postid)
                 } else {
                     that.$router.push('/posts')
                 }
@@ -46,13 +48,23 @@
                 that.$http.post(that.$store.state.api + '/v1/post/load_post_by_id', sendData)
                     .then(data => {
                         const Data = data.data
-
                         console.log(Data)
                         if(Data.code === 0){
-                            that.post_name=Data.data[0].post_title
+                            that.postData = Data.data[0]
                             that.commentsList = []
+                            that.post = {
+                                comment_id: that.postData.post_id,
+                                img_url: that.$store.state.headurl + that.postData.user_id % 30,
+                                user_id: that.postData.user_id,
+                                user_nickname: that.postData.owner_nickname,
+                                time: that.postData.create_time,
+                                content: that.postData.content,
+                                star_cnt: that.postData.thumbs_up_num,
+                                i_stared: that.postData.is_liked,
+                                user_url: '#/user?userid='+that.postData.user_id
+                            }
                             for (const item of Data.comments) {
-                                that.commentsList.push({
+                                that.commentsList.unshift({
                                     comment_id: item.comment_id,
                                     img_url: that.$store.state.headurl + item.user_id % 30,
                                     user_id: item.user_id,
@@ -60,7 +72,8 @@
                                     time: item.create_time,
                                     content: item.content,
                                     star_cnt: item.thumbs_up_num,
-                                    i_stared: item.is_liked
+                                    i_stared: item.is_liked,
+                                    user_url: '#/user?userid='+item.user_id,
                                 })
                             }
                             if (open) this.showComments = !this.showComments

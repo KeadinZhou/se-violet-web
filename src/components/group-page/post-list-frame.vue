@@ -56,7 +56,6 @@
                                     user_id:item.user_id,
                                     user_nickname:item.owner_nickname,
                                     gruop_id:item.group_id
-
                                 })
                             }
                         }else {

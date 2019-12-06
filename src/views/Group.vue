@@ -2,7 +2,7 @@
     <div>
         <group-page-head></group-page-head>
         <post-list-frame v-if="show"></post-list-frame>
-        <post-sender :gruop_id="group_id" :Item_id="Item_id" @sendOK="refresh"></post-sender>
+        <post-sender v-if="group_id" :group_id="group_id" :Item_id="Item_id" @sendOK="refresh"></post-sender>
     </div>
 </template>
 
@@ -47,7 +47,7 @@
         watch: {
             '$route' () {
                 this.getGroupId()
-            },
+            }
         }
 
     }

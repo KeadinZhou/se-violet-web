@@ -2,8 +2,8 @@
     <div>
         <div class="group-page-head">
             <div class="group-info-box">
-                <div class="group-name"><b>{{groupname}}</b></div>
-                <div><el-button size="small" round v-if="groupname">加入圈子</el-button></div>
+                <div class="group-name"><b>{{isPost?postTitle:groupname}}</b></div>
+                <div><el-button size="small" round v-if="groupname&!isPost">加入圈子</el-button></div>
             </div>
             <div class="group-img-box">
                 <img :src="img" alt="" width="200px">
@@ -16,16 +16,25 @@
 <script>
     export default {
         name: "group-page-head",
+        props: {
+            isPost: Boolean,
+            postTitle: String,
+            groupId: Number
+        },
         data() {
             return{
                 groupname:'',
-                img:null,
+                img: null,
                 group_id: ''
             }
         },
         methods: {
             getGroupId() {
                 const that = this
+                if (that.isPost) {
+                    that.group_id = that.groupId
+                    return
+                }
                 if (that.$route.query.groupid) {
                     that.group_id = Number(that.$route.query.groupid)
                 } else {
@@ -41,7 +50,7 @@
                         const Data = data.data
                         console.log(Data)
                         if (Data.code === 0) {
-                            that.groupname = Data.data[0].group_name
+                            that.groupname =  Data.data[0].group_name
                             that.img = that.$store.state.groupImg(that.group_id)
                         } else {
                             const msg = Data.errMsg

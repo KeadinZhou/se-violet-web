@@ -1,7 +1,7 @@
 <template>
     <div class="post-frame">
         <div class="post-left-icon">
-            <el-badge :value="postData.reply_cnt" type="primary" :hidden="postData.reply_cnt!==0">
+            <el-badge :value="postData.reply_cnt" type="primary" :hidden="postData.reply_cnt===0">
                 <i class="el-icon-chat-round" style="font-size: 30px"></i>
             </el-badge>
         </div>
@@ -17,11 +17,11 @@
         <div class="post-right-box">
             <div>
                 <i class="el-icon-user"></i>&nbsp;
-                <el-link style="font-size: 14px">{{postData.user_nickname}}</el-link>
+                <el-link style="font-size: 14px" :href="'#/user?userid='+postData.user_id">{{postData.user_nickname}}</el-link>
             </div>
             <div>
                 <i class="el-icon-connection"></i>&nbsp;
-                <el-link style="font-size: 14px">{{postData.group_name}}</el-link>
+                <el-link style="font-size: 14px" :href="postData.link">{{postData.group_name}}</el-link>
             </div>
         </div>
     </div>

@@ -23,8 +23,8 @@
         name: "post-sender",
         props: {
             noTitle: Boolean,
-            group_id:String,
-            Item_id: String
+            group_id: Number,
+            Item_id: Number
         },
         data () {
             return {
