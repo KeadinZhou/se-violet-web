@@ -3,7 +3,7 @@
         <div class="group-page-head">
             <div class="group-info-box">
                 <div class="group-name"><b>{{isPost?postTitle:groupname}}</b></div>
-                <div><el-button size="small" round v-if="groupname&!isPost">加入圈子</el-button></div>
+                <div><el-button size="small" round v-if="groupname&&!isPost" @click="joinOrExit">{{is_joined?'退出圈子':'加入圈子'}}</el-button></div>
             </div>
             <div class="group-img-box">
                 <img :src="img" alt="" width="200px">
@@ -25,7 +25,8 @@
             return{
                 groupname:'',
                 img: null,
-                group_id: ''
+                group_id: '',
+                is_joined: false
             }
         },
         methods: {
@@ -52,6 +53,7 @@
                         if (Data.code === 0) {
                             that.groupname =  Data.data[0].group_name
                             that.img = that.$store.state.groupImg(that.group_id)
+                            that.is_joined = Data.data[0].is_joined
                         } else {
                             const msg = Data.errMsg
                             console.log(msg)
@@ -70,6 +72,11 @@
                             that.$message.error('系统错误')
                         }
                     })
+            },
+            joinOrExit () {
+                const that = this
+                that.is_joined = !that.is_joined
+                that.$message.success(that.is_joined?'加入成功':'退出成功')
             }
         },
         created() {

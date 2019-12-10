@@ -30,7 +30,7 @@
                         :title="item.group_name"
                         :img-url="item.img_url"
                         :url="item.url"
-                        :second-title="'成员数量:'+item.member_cnt">
+                        :second-title="'圈子热度:'+item.member_cnt">
                 </img-name-box>
                 <div class="add-group-box" @click="tryToAddGroup">
                     <img-name-box
